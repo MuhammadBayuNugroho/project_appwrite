@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'data/data_provider/auth.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,7 +30,11 @@ class MyHomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: ElevatedButton(onPressed: () {}, child: const Text("Add User")),
+        child: ElevatedButton(
+            onPressed: () {
+              createUser();
+            },
+            child: const Text("Add User")),
       ),
     );
   }
