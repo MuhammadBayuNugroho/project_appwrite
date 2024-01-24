@@ -32,7 +32,7 @@ class MyHomePage extends StatelessWidget {
       body: Center(
         child: ElevatedButton(
             onPressed: () {
-              createUser();
+              AuthDataProvider().createUser();
             },
             child: const Text("Add User")),
       ),

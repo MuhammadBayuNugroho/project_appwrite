@@ -1,45 +1,44 @@
 import 'package:appwrite/appwrite.dart';
-import '../../models/user.dart';
 import '../../common/constant.dart';
+import 'dart:developer';
 
 class AuthDataProvider {
-  final Client client =
-      Client().setEndpoint(Constant.endPoint).setProject(Constant.projectId);
-
-  final Account account = Account(client);
-}
-
-// Create new User
-
-Future createUser() async {
-  final user = await account.create(
-      userId: ID.unique(),
-      email: 'demo@appwrite.io',
-      password: 'password',
-      name: 'Demo User');
-  print('User created succesfuly');
-}
-
-class UserDataProvider {
   // Create an appwrite client instance
-  final client = Client()
-    ..setEndpoint('https://[ENDPOINT]/v1') // Your Appwrite Endpoint
-    ..setProject('[PROJECT]') // Your Appwrite Project ID
-    ..setSelfSigned(); // Do not use this in production
+  final Account account = Constant.appwriteAccount;
 
-  // Create an appwrite account instance
-  final account = Account(client);
+  // Create new User
+  Future createUser() async {
+    try {
+      final user = await account.create(
+          userId: ID.unique(),
+          email: 'demo@appwrite.io',
+          password: 'password',
+          name: 'Demo User');
+      print('User created succesfuly');
+      inspect(user);
+      return user;
+    } catch (e) {
+      print(e);
+    }
+  }
 
   // Perform the login request using the appwrite SDK
-  Future<User> login(String email, String password) async {
-    final response = await account.createSession(
-      email: email,
-      password: password,
-    );
-    if (response.statusCode == 201) {
-      return User.fromJson(response.data['user']);
-    } else {
-      throw Exception(response.data['message']);
+  Future login(String email, String password) async {
+    try {
+      final response = await account.createEmailSession(
+        email: email,
+        password: password,
+      );
+      print('login success');
+      inspect(response);
+      return response;
+    } catch (e) {
+      print(e);
     }
+  }
+
+  // Perform the logout request using the appwrite SDK
+  Future logout() async {
+    await account.deleteSession(sessionId: 'current');
   }
 }
